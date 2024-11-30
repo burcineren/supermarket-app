@@ -39,11 +39,31 @@ export class MarketService {
     return this.http.delete(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}`);
   }
 
-  addProduct(marketId: number, sectionId: string, product: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}/products`, product);
-  }
+  // addProduct(marketId: number, sectionId: string, product: any): Observable<any> {
+  //   return this.http.post(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}/products`, product);
+  // }
 
+
+  addProduct(marketId: number, sectionId: string, product: any): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/markets/${marketId}`).pipe(
+      switchMap((market) => {
+        const updatedSections = market.sections.map((section: any) => {
+          if (section.id === sectionId) {
+            const updatedProducts = [...(section.products || []), product];
+            return { ...section, products: updatedProducts };
+          }
+          return section;
+        });
+  
+        return this.http.patch(`${this.baseUrl}/markets/${marketId}`, {
+          sections: updatedSections,
+        });
+      })
+    );
+  }
   deleteProduct(marketId: number, sectionId: string, productId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}/products/${productId}`);
   }
+
+  
 }

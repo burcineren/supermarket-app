@@ -18,6 +18,13 @@ export class MarketComponent {
   selectedMarket: any;
   selectedType: string = '';
   nextSectionId: string = '';
+  isProductPopupVisible: boolean = false;
+  selectedSection: any = null;
+  newProduct: any = {
+    id: '',
+    name: '',
+  };
+
   constructor(private marketService: MarketService) { }
 
   ngOnInit(): void {
@@ -68,4 +75,27 @@ export class MarketComponent {
     });
   }
 
+  openProductPopup(market: any, section: any): void {
+    this.selectedMarket = market;
+    this.selectedSection = section;
+    this.isProductPopupVisible = true;
+    this.newProduct = { id: '', name: '' }; // Yeni ürün bilgilerini sıfırla
+  }
+
+  closeProductPopup(): void {
+    this.isProductPopupVisible = false;
+    this.selectedMarket = null;
+    this.selectedSection = null;
+  }
+
+  addProduct(): void {
+    if (this.newProduct.id && this.newProduct.name) {
+      this.marketService
+        .addProduct(this.selectedMarket.id, this.selectedSection.id, this.newProduct)
+        .subscribe(() => {
+          this.loadMarkets();
+          this.closeProductPopup();
+        });
+    }
+  }
 }
