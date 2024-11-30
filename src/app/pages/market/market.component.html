@@ -1,0 +1,63 @@
+@for(market of markets;track market ){
+<div>
+  <h2>{{ market.name }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Reyon</th>
+        <th>Tür</th>
+        <th>Ürünler</th>
+        <th>İşlemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(section of market.sections;track section ){
+      <tr>
+        <td>{{ section.id }}</td>
+        <td>{{ section.type }}</td>
+        <td>
+          @for(product of section.products;track product ){
+          <span>{{ product.name }}</span>
+          }
+        </td>
+        <td>
+          <button (click)="deleteSection(market.id, section.id)">Sil</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+  <button (click)="openPopup(market)">Reyon Ekle</button>
+</div>
+} @if (isPopupVisible){
+<div class="popup-container">
+  <div class="popup">
+    <h2>Reyon Ekle</h2>
+    <form (ngSubmit)="addSection()">
+      <label for="reyonAdi">Reyon Adı</label>
+      <input id="reyonAdi" type="text" [value]="nextSectionId" disabled />
+
+      <label for="reyonTuru">Reyon Türü</label>
+      <select
+        id="reyonTuru"
+        [(ngModel)]="selectedType"
+        name="reyonTuru"
+        required
+      >
+        @for (type of sectionTypes; track type) {
+        <option [value]="type">
+          {{ type }}
+        </option>
+        }
+      </select>
+
+      <label for="market">Eklenecek Market</label>
+      <input id="market" type="text" [value]="selectedMarket?.name" disabled />
+
+      <button type="submit">Ekle</button>
+      <button type="button" (click)="closePopup()">İptal</button>
+    </form>
+  </div>
+</div>
+
+}
