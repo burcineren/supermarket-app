@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable, map, switchMap} from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { Observable, map, switchMap } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ export class MarketService {
 
   private baseUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getMarkets(): Observable<any> {
     return this.http.get(`${this.baseUrl}/markets`);
@@ -18,9 +18,9 @@ export class MarketService {
   getSectionTypes(): Observable<string[]> {
     return this.http.get<any[]>(`${this.baseUrl}/sectionTypes`).pipe(
       map((data) => {
-        const sectionTypesObject = data[0]; 
-        delete sectionTypesObject.id; 
-        return Object.values(sectionTypesObject); 
+        const sectionTypesObject = data[0];
+        delete sectionTypesObject.id;
+        return Object.values(sectionTypesObject);
       })
     );
   }
@@ -36,7 +36,15 @@ export class MarketService {
   }
 
   deleteSection(marketId: number, sectionId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}`);
+    return this.http.get<any>(`${this.baseUrl}/markets/${marketId}`).pipe(
+      switchMap((market) => {
+        const updatedSections = market.sections.filter((section: any) => section.id !== sectionId);
+
+        return this.http.patch(`${this.baseUrl}/markets/${marketId}`, {
+          sections: updatedSections,
+        });
+      })
+    );
   }
 
   // addProduct(marketId: number, sectionId: string, product: any): Observable<any> {
@@ -54,7 +62,7 @@ export class MarketService {
           }
           return section;
         });
-  
+
         return this.http.patch(`${this.baseUrl}/markets/${marketId}`, {
           sections: updatedSections,
         });
@@ -65,5 +73,5 @@ export class MarketService {
     return this.http.delete(`${this.baseUrl}/markets/${marketId}/sections/${sectionId}/products/${productId}`);
   }
 
-  
+
 }

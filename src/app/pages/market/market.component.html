@@ -18,7 +18,7 @@
     <tbody>
       @for(section of market.sections;track section ){
       <tr>
-        <td>{{ section.id }}  <i class="fas fa-trash delete" (click)="deleteSection(market.id, section.id)"></i>
+        <td>{{ section.id }}  <i class="fas fa-trash delete"  (click)="deleteSection(market.id, section.id)"></i>
           
       </td>
         <td>{{ section.type }}</td>

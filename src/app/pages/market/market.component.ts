@@ -70,16 +70,18 @@ export class MarketComponent {
   }
 
   deleteSection(marketId: number, sectionId: string): void {
-    this.marketService.deleteSection(marketId, sectionId).subscribe(() => {
-      this.loadMarkets();
-    });
+    if (confirm('Bu reyonu silmek istediğinize emin misiniz?')) {
+      this.marketService.deleteSection(marketId, sectionId).subscribe(() => {
+        console.log('Reyon başarıyla silindi.');
+        this.loadMarkets();
+      });
+    }
   }
-
   openProductPopup(market: any, section: any): void {
     this.selectedMarket = market;
     this.selectedSection = section;
     this.isProductPopupVisible = true;
-    this.newProduct = { id: '', name: '' }; // Yeni ürün bilgilerini sıfırla
+    this.newProduct = { id: '', name: '' };
   }
 
   closeProductPopup(): void {
