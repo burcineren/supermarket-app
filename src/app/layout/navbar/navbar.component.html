@@ -1,0 +1,17 @@
+<div class="navbar">
+    <div class="logo">
+      <span>Supermarket APP</span>
+    </div>
+    <div class="exchange-rates">
+        <div class="exchange-rates">
+            <div *ngFor="let rate of exchangeRates">
+              <div *ngIf="rate.currency === 'USD'">💵 $ {{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
+              <div *ngIf="rate.currency === 'GBP'">💷 £{{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
+              <div *ngIf="rate.currency === 'EUR'">💶 € {{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
+            </div>
+          </div>
+      </div>
+    <div class="search">
+      <input type="text" placeholder="Ürün Ara" />
+    </div>
+  </div>

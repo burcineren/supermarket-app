@@ -3,12 +3,13 @@ import { MarketService } from "../../core/services/market.service";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../../layout/navbar/navbar.component';
 
 
 @Component({
   selector: 'app-market',
   standalone: true,
-  imports: [HttpClientModule, FormsModule,CommonModule],
+  imports: [HttpClientModule, FormsModule,CommonModule,NavbarComponent],
   templateUrl: './market.component.html',
   styleUrl: './market.component.scss'
 })
