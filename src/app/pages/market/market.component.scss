@@ -1,11 +1,11 @@
 body {
-  // background-color: #1e1e2f;
   font-family: 'Arial', sans-serif;
   color: #ffffff;
   margin: 0;
   padding: 0;
-  background: #191926 !important;
+  
 }
+
 p,th,tr,h1,h2,h3,h4,h5,h6,label {
   font-family: 'Arial', sans-serif;
 }
@@ -168,12 +168,14 @@ button.delete:hover {
   color: #ffffff;
   width: 92%;
   margin-bottom: 15px;
+  
 }
 
 .popup button {
-  width: 100%;
+  width: 44%;
   padding: 10px;
   font-size: 1rem;
+  margin-right: 1rem;
 }
 
 .popup button:nth-child(1) {
@@ -210,6 +212,18 @@ button.delete:hover {
   align-items: center;
 }
 
+.close-icon {
+  display: flex;
+  justify-content: end;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-icon:hover {
+  color: #ff6b6b;
+}
 .popup {
   background: #1c1c1e;
   color: #fff;

@@ -1,49 +1,53 @@
-
-  <div class=" ">
-<div class="container d-content-center d-flex flex-wrap" >
-  
-    
-  @for(market of markets;track market ){
- <div class="d-block">
-  <h2>{{ market.name }}</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Reyon</th>
-        <th>Tür</th>
-        <th>Ürünler</th>
-        <th> <button (click)="openPopup(market)">Reyon Ekle</button></th>
-      </tr>
-    </thead>
-    <tbody>
-      @for(section of market.sections;track section ){
-      <tr>
-        <td>{{ section.id }}  <i class="fas fa-trash delete"  (click)="deleteSection(market.id, section.id)"></i>
-          
-      </td>
-        <td>{{ section.type }}</td>
-        <td>
-          @for(product of section.products;track product ){
-          <span>{{ product.name }}</span>
+<div class=" ">
+  <div class="container d-content-center d-flex flex-wrap">
+    @for(market of markets;track market ){
+    <div class="d-block">
+      <h2>{{ market.name }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Reyon</th>
+            <th>Tür</th>
+            <th>Ürünler</th>
+            <th><button (click)="openPopup(market)">Reyon Ekle</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(section of market.sections;track section ){
+          <tr>
+            <td>
+              {{ section.id }}
+              <i
+                class="fas fa-trash delete"
+                (click)="deleteSection(market.id, section.id)"
+              ></i>
+            </td>
+            <td>{{ section.type }}</td>
+            <td>
+              @for(product of section.products;track product ){
+              <span (click)="openProductEditPopup(market, section, product)">{{
+                product.name
+              }}</span>
+              }
+            </td>
+            <td>
+              <button (click)="openProductPopup(market, section)">
+                Ürün Ekle
+              </button>
+            </td>
+          </tr>
           }
-        </td>
-        <td>
-          
-          <button (click)="openProductPopup(market, section)">Ürün Ekle</button>
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
-
- </div>
-} 
-</div>
+        </tbody>
+      </table>
+    </div>
+    }
+  </div>
 </div>
 
 @if (isPopupVisible){
 <div class="popup-container">
   <div class="popup">
+    <span class="close-icon" (click)="closePopup()">&times;</span>
     <h2>Reyon Ekle</h2>
     <form (ngSubmit)="addSection()">
       <label for="reyonAdi">Reyon Adı</label>
@@ -55,7 +59,6 @@
         [(ngModel)]="selectedType"
         name="reyonTuru"
         required
-        
       >
         @for (type of sectionTypes; track type) {
         <option [value]="type">
@@ -73,36 +76,101 @@
   </div>
 </div>
 
-}
-@if(isProductPopupVisible){
-  <div  class="popup-container">
-    <div class="popup">
-      <h2>Ürün Ekle</h2>
-      <form (ngSubmit)="addProduct()">
-        <label for="productId">Ürün ID</label>
-        <input
-          id="productId"
-          type="text"
-          [(ngModel)]="newProduct.id"
-          name="productId"
-          required
-        />
-  
-        <label for="productName">Ürün Adı</label>
-        <input
-          id="productName"
-          type="text"
-          [(ngModel)]="newProduct.name"
-          name="productName"
-          required
-        />
-  
-        <label for="section">Eklenecek Reyon</label>
-        <input id="section" type="text" [value]="selectedSection?.id" disabled />
-  
-        <button type="submit">Ekle</button>
-        <button type="button" (click)="closeProductPopup()">İptal</button>
-      </form>
-    </div>
+} @if(isProductPopupVisible){
+<div class="popup-container">
+  <div class="popup">
+    <span class="close-icon" (click)="closeProductPopup()">&times;</span>
+    <h2>Ürün Ekle</h2>
+    <form (ngSubmit)="addProduct()">
+      <label for="productId">Ürün ID</label>
+      <input
+        id="productId"
+        type="text"
+        [(ngModel)]="newProduct.id"
+        name="productId"
+        required
+      />
+
+      <label for="productName">Ürün Adı</label>
+      <input
+        id="productName"
+        type="text"
+        [(ngModel)]="newProduct.name"
+        name="productName"
+        required
+      />
+
+      <label for="section">Eklenecek Reyon</label>
+      <input id="section" type="text" [value]="selectedSection?.id" disabled />
+
+      <button type="submit">Ekle</button>
+      <button type="button" (click)="closeProductPopup()">İptal</button>
+    </form>
   </div>
+</div>
+} @if(isProductEditPopupVisible){
+<div class="popup-container">
+  <div class="popup">
+    <span class="close-icon" (click)="closeProductEditPopup()">&times;</span>
+    <h2>Ürün Düzenleme</h2>
+
+    <form (ngSubmit)="moveProduct()">
+
+      <label for="productId">Ürün ID</label>
+      <input
+        id="productId"
+        type="text"
+        [value]="selectedProduct?.id"
+        disabled
+      />
+
+      <label for="productName">Ürün Adı</label>
+      <input id="productName" type="text" name="productName" [(ngModel)]="selectedProduct.name" />
+
+      <label for="currentSectionType">Bulunduğu Reyon Türü</label>
+      <input
+        id="currentSectionType"
+        type="text"
+        [value]="selectedSection?.type"
+        disabled
+      />
+
+      <label for="targetMarket">Taşınacak Marketi Seçiniz</label>
+      <select
+        id="targetMarket"
+        [(ngModel)]="targetMarketId"
+        name="targetMarket"
+        (change)="onTargetMarketChange()"
+        required
+      >
+        @for(market of filteredMarkets;track market ){
+        <option [value]="market.id">
+          {{ market.name }}
+        </option>
+        }
+      </select>
+
+      <label for="targetSection">Taşınacak Reyonu Seçiniz</label>
+      <select
+        id="targetSection"
+        [(ngModel)]="targetSectionId"
+        name="targetSection"
+        required
+      >
+        @for(section of filteredSections;track section ){
+        <option [value]="section.id">
+          {{ section.id }}
+        </option>
+        }
+      </select>
+
+      <div class="button-group">
+        <button type="button" class="delete" (click)="deleteProduct()">
+          Ürünü Sil
+        </button>
+        <button type="submit">Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
 }

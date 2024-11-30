@@ -2,12 +2,13 @@ import { Component } from '@angular/core';
 import { MarketService } from "../../core/services/market.service";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-market',
   standalone: true,
-  imports: [HttpClientModule, FormsModule],
+  imports: [HttpClientModule, FormsModule,CommonModule],
   templateUrl: './market.component.html',
   styleUrl: './market.component.scss'
 })
@@ -20,6 +21,15 @@ export class MarketComponent {
   nextSectionId: string = '';
   isProductPopupVisible: boolean = false;
   selectedSection: any = null;
+  selectedProduct: any = null; 
+  selectedProductName: string = '';
+  filteredMarkets: any[] = []; 
+  filteredSections: any[] = []; 
+
+  targetMarketId: number | null = null;
+  targetSectionId: string | null = null; 
+
+  isProductEditPopupVisible: boolean = false; 
   newProduct: any = {
     id: '',
     name: '',
@@ -99,5 +109,59 @@ export class MarketComponent {
           this.closeProductPopup();
         });
     }
+  }
+  openProductEditPopup(market: any, section: any, product: any): void {
+    this.selectedMarket = market;
+    this.selectedSection = section;
+    this.selectedProduct = product;
+  
+    if (product) {
+      this.selectedProductName = product.name; 
+    }
+  
+  
+    this.filteredMarkets = this.markets.map((m) => ({
+      ...m,
+      sections: m.sections.filter((s:any) => s.type === section.type),
+    }));
+  
+    this.isProductEditPopupVisible = true;
+  }
+  
+  moveProduct(): void {
+    if (this.targetMarketId && this.targetSectionId) {
+      this.marketService
+        .moveProduct(
+          this.selectedMarket.id,
+          this.selectedSection.id,
+          this.selectedProduct.id,
+          this.targetMarketId,
+          this.targetSectionId
+        )
+        .subscribe(() => {
+          this.loadMarkets();
+          this.closeProductEditPopup();
+        });
+    }
+  }
+  
+  deleteProduct(): void {
+    this.marketService
+      .deleteProduct(this.selectedMarket.id, this.selectedSection.id, this.selectedProduct.id)
+      .subscribe(() => {
+        this.loadMarkets();
+        this.closeProductEditPopup();
+      });
+  }
+  
+  closeProductEditPopup(): void {
+    this.isProductEditPopupVisible = false;
+    this.selectedMarket = null;
+    this.selectedSection = null;
+    this.selectedProduct = null;
+  }
+  onTargetMarketChange(): void {
+    const selectedMarket = this.markets.find((market) => market.id === this.targetMarketId);
+    this.filteredSections = selectedMarket ? selectedMarket.sections.filter((section:any) => section.type ) : [];
   }
 }
