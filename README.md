@@ -1,8 +1,9 @@
 # SupermarketApp
 
-<video src="src/assets/readMe.mov" controls="controls" style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
+# Angular Project Video
+
+[Click to Watch Project Video](https://github.com/burcineren/supermarket-app/blob/master/src/assets/readMe.mov)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.2.
 
 ## Development server
