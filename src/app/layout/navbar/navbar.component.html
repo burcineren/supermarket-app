@@ -3,15 +3,32 @@
       <span>Supermarket APP</span>
     </div>
     <div class="exchange-rates">
-        <div class="exchange-rates">
-            <div *ngFor="let rate of exchangeRates">
-              <div *ngIf="rate.currency === 'USD'">💵 $ {{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
-              <div *ngIf="rate.currency === 'GBP'">💷 £{{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
-              <div *ngIf="rate.currency === 'EUR'">💶 € {{rate.currency}}: {{ rate.value | number: '1.2-2' }} </div>
-            </div>
-          </div>
+      <div *ngFor="let rate of exchangeRates">
+        <div *ngIf="rate.currency === 'USD'">💵 $ {{ rate.value | number: '1.2-2' }}</div>
+        <div *ngIf="rate.currency === 'GBP'">💷 £{{ rate.value | number: '1.2-2' }}</div>
+        <div *ngIf="rate.currency === 'EUR'">💶 €{{ rate.value | number: '1.2-2' }}</div>
       </div>
+    </div>
     <div class="search">
-      <input type="text" placeholder="Ürün Ara" />
+      <input
+        type="text"
+        placeholder="Ürün Ara"
+        [(ngModel)]="searchTerm"
+        (input)="filterMarkets()"
+      />
+    </div>
+  </div>
+  
+  <div class="market-list">
+    <div *ngFor="let market of filteredMarkets">
+      <h2>{{ market.name }}</h2>
+      <div *ngFor="let section of market.sections">
+        <h3>{{ section.name }}</h3>
+        <ul>
+          <li *ngFor="let product of section.products">
+            {{ product.name }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>

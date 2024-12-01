@@ -1,30 +1,43 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: #ffffff;
   margin: 0;
   padding: 0;
-  
+}
+.bg-dark {
+  background: #191926 !important;
+}
+h2 {
+  color: aliceblue;
+}
+p,
+th,
+tr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+div {
+  font-family: "Arial", sans-serif;
 }
 
-p,th,tr,h1,h2,h3,h4,h5,h6,label,div {
-  font-family: 'Arial', sans-serif;
-}
 .container {
- 
   justify-content: space-between;
   padding: 20px;
 }
-.d-flex{
+.d-flex {
   display: flex;
-
 }
-.d-block{
+.d-block {
   display: block;
 }
-.flex-wrap{
+.flex-wrap {
   flex-wrap: wrap;
 }
-.d-content-center{
+.d-content-center {
   justify-content: center;
 }
 .market {
@@ -32,13 +45,13 @@ p,th,tr,h1,h2,h3,h4,h5,h6,label,div {
   border-radius: 10px;
   padding: 20px;
   margin: 10px;
-  width: 48%; 
+  width: 48%;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
   .market {
-    width: 100%; 
+    width: 100%;
   }
 }
 
@@ -136,7 +149,7 @@ button.delete:hover {
   background-color: #2f2f41;
   padding: 20px;
   border-radius: 8px;
-  width: 90%; 
+  width: 90%;
   max-width: 400px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -168,7 +181,6 @@ button.delete:hover {
   color: #ffffff;
   width: 92%;
   margin-bottom: 15px;
-  
 }
 
 .popup button {
@@ -194,10 +206,9 @@ button.delete:hover {
   background-color: #c0392b;
 }
 
-.delete{
+.delete {
   color: #c0392b;
   cursor: pointer;
-
 }
 //todo:: Popup start
 .popup-container {
