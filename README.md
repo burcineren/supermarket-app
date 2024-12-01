@@ -1,6 +1,6 @@
 # SupermarketApp
 
-# Angular Project Video
+## Angular Project Video
 
 [Click to Watch Project Video](https://github.com/burcineren/supermarket-app/blob/master/src/assets/readMe.mov)
 
