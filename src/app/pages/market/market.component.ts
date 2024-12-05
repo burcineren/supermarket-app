@@ -4,6 +4,9 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../layout/navbar/navbar.component';
+import { addSection, loadMarkets } from '../../core/stores/markets/market.actions';
+import { Store } from '@ngrx/store';
+import { selectMarkets } from '../../core/stores/markets/market.selectors';
 
 
 @Component({
@@ -36,18 +39,18 @@ export class MarketComponent {
     name: '',
   };
 
-  constructor(private marketService: MarketService) { }
+  constructor(private marketService: MarketService,private store: Store) { }
 
   ngOnInit(): void {
-    this.loadMarkets();
+    this.store.dispatch(loadMarkets());
     this.loadSectionTypes();
   }
 
-  loadMarkets(): void {
-    this.marketService.getMarkets().subscribe((data) => {
-      this.markets = data;
-    });
-  }
+  // loadMarkets(): void {
+  //   this.marketService.getMarkets().subscribe((data) => {
+  //     this.markets = data;
+  //   });
+  // }
 
   loadSectionTypes(): void {
     this.marketService.getSectionTypes().subscribe((data) => {
@@ -66,17 +69,20 @@ export class MarketComponent {
     this.selectedType = '';
   }
   addSection(): void {
-    if (this.selectedType) {
+    if (this.selectedType && this.selectedMarket) {
       const newSection = {
         id: this.nextSectionId,
-        type: this.selectedType,
-        products: []
+        name: this.selectedType,
+        products: [],
       };
-      this.marketService.addSection(this.selectedMarket.id, newSection).subscribe(() => {
-
-        this.loadMarkets();
-        this.closePopup();
-      });
+  
+      // Dispatch the addSection action
+      this.store.dispatch(
+        addSection({ marketId: this.selectedMarket.id, section: newSection })
+      );
+  
+      // Close the popup after dispatching the action
+      this.closePopup();
     }
   }
 
@@ -84,7 +90,7 @@ export class MarketComponent {
     if (confirm('Bu reyonu silmek istediğinize emin misiniz?')) {
       this.marketService.deleteSection(marketId, sectionId).subscribe(() => {
         console.log('Reyon başarıyla silindi.');
-        this.loadMarkets();
+       
       });
     }
   }
@@ -106,7 +112,7 @@ export class MarketComponent {
       this.marketService
         .addProduct(this.selectedMarket.id, this.selectedSection.id, this.newProduct)
         .subscribe(() => {
-          this.loadMarkets();
+         
           this.closeProductPopup();
         });
     }
@@ -140,7 +146,7 @@ export class MarketComponent {
           this.targetSectionId
         )
         .subscribe(() => {
-          this.loadMarkets();
+      
           this.closeProductEditPopup();
         });
     }
@@ -150,7 +156,6 @@ export class MarketComponent {
     this.marketService
       .deleteProduct(this.selectedMarket.id, this.selectedSection.id, this.selectedProduct.id)
       .subscribe(() => {
-        this.loadMarkets();
         this.closeProductEditPopup();
       });
   }
